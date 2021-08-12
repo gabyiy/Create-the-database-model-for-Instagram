@@ -8,23 +8,40 @@ from eralchemy import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
+class User(Base):
+    __tablename__ = 'user'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
+    userName= Column(String(200), nullable=False)
+    password= Column(Integer,nullable=False)
+    post_id=Column(ForeignKey('post.id'))
+    post=relationship('Post')
 
-class Address(Base):
-    __tablename__ = 'address'
+class Post(Base):
+    __tablename__ = 'post'
     # Here we define columns for the table address.
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    video=relationship('Video')
+    music=relationship('Music')
+    
+class Video(Base):
+    __tablename__ ='video'
+    id=Column(Integer,primary_key=True)
+    name=Column(String(200),nullable=False)
+    length=Column(Integer,nullable=False)
+    type=Column(String(300),nullable=False)
+    post_id=Column(Integer,ForeignKey('post.id'))
+
+class Music(Base):
+    __tablename__='music'
+    id=Column(Integer,primary_key=True)
+    type=Column(String(300),nullable=False)
+    length=Column(Integer,nullable=False)   
+    post_id=Column(Integer,ForeignKey('post.id')) 
+  
 
     def to_dict(self):
         return {}
